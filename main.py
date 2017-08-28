@@ -167,13 +167,15 @@ def run():
         # TODO: Build NN using load_vgg, layers, and optimize function
         image_input, keep_prob, vgg_layer3_out, vgg_layer4_out, vgg_layer7_out = load_vgg(sess, vgg_path)
 
+        nn_last_layer = layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
+
         # call optimize()
-        logits, train_op, cross_entropy_loss = optimize(vgg_layer7_out, correct_label, learning_rate, num_classes)
+        logits, train_op, cross_entropy_loss = optimize(nn_last_layer, correct_label, learning_rate, num_classes)
 
         # TODO: Train NN using the train_nn function
         train_nn(sess,
                  epochs=2,
-                 batch_size=128,
+                 batch_size=64,
                  get_batches_fn=get_batches_fn,
                  train_op=train_op,
                  cross_entropy_loss=cross_entropy_loss,
