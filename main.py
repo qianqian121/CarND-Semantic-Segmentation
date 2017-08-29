@@ -75,7 +75,7 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
         :return: TF Operation
         """
         # TODO: Use `tf.layers.conv2d_transpose`
-        return tf.layers.conv2d_transpose(x, num_outputs, kernel_size, strides)
+        return tf.layers.conv2d_transpose(x, num_outputs, kernel_size, strides, padding='same')
 
     vgg_layer3_1x1 = conv_1x1(vgg_layer3_out, num_classes)
     vgg_layer4_1x1 = conv_1x1(vgg_layer4_out, num_classes)
@@ -135,6 +135,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     for i in range(epochs):
         for image, label in get_batches_fn(batch_size):
             _, loss = sess.run([train_op, cross_entropy_loss], feed_dict={input_image:image, correct_label:label, keep_prob:0.8, learning_rate:1e-4})
+        print('.')
 
 tests.test_train_nn(train_nn)
 
@@ -174,8 +175,8 @@ def run():
 
         # TODO: Train NN using the train_nn function
         train_nn(sess,
-                 epochs=2,
-                 batch_size=64,
+                 epochs=25,
+                 batch_size=1,
                  get_batches_fn=get_batches_fn,
                  train_op=train_op,
                  cross_entropy_loss=cross_entropy_loss,
